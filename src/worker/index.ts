@@ -8,49 +8,7 @@ export interface Env {
   OPENAI_API_KEY?: string;
 }
 
-const BRAND = `
-:root{--gl-green:#3FBF4E;--gl-green-dark:#2E9E3C;--gl-leaf:#57D463;--gl-belly:#B9EFAB;--gl-sun:#FFC93C;--gl-ink:#26332B;--gl-cream:#FFF9EC;--gl-blush:#FF9FB1}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--gl-cream);color:var(--gl-ink);line-height:1.55}
-a{color:var(--gl-green-dark)} nav{border-bottom:1px solid #e5e7eb;background:#fff;position:sticky;top:0;z-index:40}
-.nav-inner{max-width:56rem;margin:0 auto;padding:.75rem 1rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
-.nav-inner a{text-decoration:none;color:var(--gl-ink);font-size:.92rem;font-weight:600}
-.nav-inner a.brand{font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:.5rem}
-.nav-inner a.brand img{height:2rem}
-main{max-width:56rem;margin:0 auto;padding:2rem 1rem 4rem}
-.pill{display:inline-block;background:var(--gl-green);color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.08em;padding:.25rem .65rem;border-radius:999px;margin-bottom:.75rem}
-h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;letter-spacing:-.04em;margin:0 0 1rem}
-h2{font-size:1.6rem;margin:0 0 .75rem}
-.lead{font-size:1.15rem;opacity:.85;max-width:40rem}
-.btn{display:inline-block;background:var(--gl-green);color:#fff;font-weight:700;padding:.85rem 1.4rem;border-radius:1rem;text-decoration:none;border:none;cursor:pointer;font-size:1rem}
-.btn:hover{background:var(--gl-green-dark)}
-.btn-ghost{background:transparent;color:var(--gl-ink);border:1px solid #d1d5db}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:1.1rem;padding:1.25rem}
-.grid3{display:grid;gap:1rem;grid-template-columns:repeat(3,1fr)}
-.grid2{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr)}
-@media(max-width:800px){.grid3,.grid2{grid-template-columns:1fr}}
-footer{max-width:56rem;margin:0 auto;padding:1.5rem 1rem;font-size:.78rem;opacity:.65;border-top:1px solid #e5e7eb}
-.chat{background:#fff;border:1px solid #e5e7eb;border-radius:1rem;padding:1rem;min-height:12rem;white-space:pre-wrap;font-size:.95rem}
-.msg-user{color:var(--gl-green-dark);font-weight:700}
-.msg-ai{margin-top:.5rem}
-input,select,textarea{width:100%;padding:.7rem .85rem;border-radius:.75rem;border:1px solid #d1d5db;font:inherit}
-label{display:grid;gap:.35rem;font-weight:650;font-size:.9rem;margin-bottom:.75rem}
-/* Sprig stage */
-.gs-stage{position:relative;width:min(280px,70vw);margin:1rem auto;user-select:none}
-.gs-stage svg{width:100%;height:auto;display:block;cursor:pointer}
-.gs-body-wrap{transform-origin:120px 240px;animation:gs-bob 3.4s ease-in-out infinite}
-@keyframes gs-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.gs-stage.lv1 .gs-body-wrap{animation:gs-c .4s ease-in-out 2}
-@keyframes gs-c{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.gs-stage.lv2 .gs-body-wrap,.gs-stage.lv3 .gs-body-wrap{animation:gs-l .45s ease-in-out infinite}
-@keyframes gs-l{0%,100%{transform:scale(1)}50%{transform:translateY(-8px) scale(.96,1.05)}}
-.gs-stage.lv4 .gs-body-wrap{animation:gs-r .48s ease-in-out infinite}
-@keyframes gs-r{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) translateY(-10px)}}
-.gs-stage.lv5 .gs-body-wrap{animation:gs-f 2.5s ease-in-out}
-@keyframes gs-f{0%,100%{transform:translateY(0)}40%{transform:translateY(-70px)}}
-.gs-bubble{position:absolute;left:50%;transform:translateX(-50%);top:-.5rem;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:.35rem .75rem;font-size:.8rem;font-weight:700;white-space:nowrap;opacity:0;transition:opacity .2s}
-.gs-bubble.on{opacity:1}
-.notice{background:#fff7d6;border:1px solid #f5e6a8;border-radius:.75rem;padding:.75rem 1rem;font-size:.92rem}
-`;
+const BRAND = `:root{--gl-green:#3FBF4E;--gl-green-dark:#2E9E3C;--gl-leaf:#57D463;--gl-belly:#B9EFAB;--gl-sun:#FFC93C;--gl-ink:#26332B;--gl-cream:#FFF9EC;--gl-blush:#FF9FB1}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--gl-cream);color:var(--gl-ink);line-height:1.55}a{color:var(--gl-green-dark)} nav{border-bottom:1px solid #e5e7eb;background:#fff;position:sticky;top:0;z-index:40}.nav-inner{max-width:56rem;margin:0 auto;padding:.75rem 1rem;display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}.nav-inner a{text-decoration:none;color:var(--gl-ink);font-size:.92rem;font-weight:600}.nav-inner a.brand{font-weight:800;font-size:1.15rem;display:flex;align-items:center;gap:.5rem}.nav-inner a.brand img{height:2rem}main{max-width:56rem;margin:0 auto;padding:2rem 1rem 4rem}.pill{display:inline-block;background:var(--gl-green);color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.08em;padding:.25rem .65rem;border-radius:999px;margin-bottom:.75rem}h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.05;letter-spacing:-.04em;margin:0 0 1rem}h2{font-size:1.6rem;margin:0 0 .75rem}.lead{font-size:1.15rem;opacity:.85;max-width:40rem}.btn{display:inline-block;background:var(--gl-green);color:#fff;font-weight:700;padding:.85rem 1.4rem;border-radius:1rem;text-decoration:none;border:none;cursor:pointer;font-size:1rem}.btn:hover{background:var(--gl-green-dark)}.btn-ghost{background:transparent;color:var(--gl-ink);border:1px solid #d1d5db}.card{background:#fff;border:1px solid #e5e7eb;border-radius:1.1rem;padding:1.25rem}.grid3{display:grid;gap:1rem;grid-template-columns:repeat(3,1fr)}.grid2{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr)}@media(max-width:800px){.grid3,.grid2{grid-template-columns:1fr}}footer{max-width:56rem;margin:0 auto;padding:1.5rem 1rem;font-size:.78rem;opacity:.65;border-top:1px solid #e5e7eb}.chat{background:#fff;border:1px solid #e5e7eb;border-radius:1rem;padding:1rem;min-height:12rem;white-space:pre-wrap;font-size:.95rem}.msg-user{color:var(--gl-green-dark);font-weight:700}.msg-ai{margin-top:.5rem}input,select,textarea{width:100%;padding:.7rem .85rem;border-radius:.75rem;border:1px solid #d1d5db;font:inherit}label{display:grid;gap:.35rem;font-weight:650;font-size:.9rem;margin-bottom:.75rem}/* Sprig stage */.gs-stage{position:relative;width:min(280px,70vw);margin:1rem auto;user-select:none}.gs-stage svg{width:100%;height:auto;display:block;cursor:pointer}.gs-body-wrap{transform-origin:120px 240px;animation:gs-bob 3.4s ease-in-out infinite}@keyframes gs-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}.gs-stage.lv1 .gs-body-wrap{animation:gs-c .4s ease-in-out 2}@keyframes gs-c{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.gs-stage.lv2 .gs-body-wrap,.gs-stage.lv3 .gs-body-wrap{animation:gs-l .45s ease-in-out infinite}@keyframes gs-l{0%,100%{transform:scale(1)}50%{transform:translateY(-8px) scale(.96,1.05)}}.gs-stage.lv4 .gs-body-wrap{animation:gs-r .48s ease-in-out infinite}@keyframes gs-r{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) translateY(-10px)}}.gs-stage.lv5 .gs-body-wrap{animation:gs-f 2.5s ease-in-out}@keyframes gs-f{0%,100%{transform:translateY(0)}40%{transform:translateY(-70px)}}.gs-bubble{position:absolute;left:50%;transform:translateX(-50%);top:-.5rem;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:.35rem .75rem;font-size:.8rem;font-weight:700;white-space:nowrap;opacity:0;transition:opacity .2s}.gs-bubble.on{opacity:1}.notice{background:#fff7d6;border:1px solid #f5e6a8;border-radius:.75rem;padding:.75rem 1rem;font-size:.92rem}`;
 
 const SPRIG_SVG = `<div class="gs-stage" id="sprig-stage" title="Click Sprig to laugh">
 <svg viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg" aria-label="Sprig the Giggle Sprout">
@@ -74,8 +32,7 @@ const SPRIG_SVG = `<div class="gs-stage" id="sprig-stage" title="Click Sprig to 
 <div class="gs-bubble" id="sprig-say"></div>
 </div>`;
 
-const GS_JS = `
-(function(){
+const GS_JS = `(function(){
   let level=0, timer=null, streak=Number(localStorage.getItem('lp_streak')||0);
   const stage=()=>document.getElementById('sprig-stage');
   const bubble=()=>document.getElementById('sprig-say');
@@ -107,7 +64,6 @@ const GS_JS = `
   document.addEventListener('click',e=>{
     if(e.target && e.target.closest && e.target.closest('#sprig-stage')) window.GiggleSprout.laugh();
   });
-  // eye track light
   document.addEventListener('mousemove',e=>{
     document.querySelectorAll('.gs-pupil').forEach((p,i)=>{
       const r=p.closest('svg').getBoundingClientRect();
@@ -118,13 +74,11 @@ const GS_JS = `
       p.setAttribute('cy', String(132+dy));
     });
   });
-  // init streak display
   document.addEventListener('DOMContentLoaded',()=>{
     const s=document.getElementById('streak-n');
     if(s) s.textContent=String(localStorage.getItem('lp_streak')||'0');
   });
-})();
-`;
+})();`;
 
 const SCENARIOS: Record<string, { title: string; system: string; openers: string[] }> = {
   work: {
@@ -175,11 +129,21 @@ ${extraScript ? `<script>${extraScript}</script>` : ""}
 </body></html>`;
 }
 
-const PAGES: Record<string, () => string> = {
-  "/": () =>
-    shell(
-      "LaughPath",
-      `<div class="pill">DUOLINGO × HEADSPACE FOR HUMOR</div>
+async function roleplayAI(env: Env, scenario: string, userMsg: string, rank: string): Promise<string> {
+  const s = SCENARIOS[scenario] || SCENARIOS.work;
+  const prompt = `You are Sprig, brand-safe humor coach for LaughPath (growinglaughs.com). Adults 18-34 only. ${s.system} No therapy claims. Suggest funny, safe replies. User ranks funniness+safety 1-5. Scenario: ${s.title}. User: ${userMsg}. Reply with 1-2 short options only.`;
+  if (!env.OPENAI_API_KEY) return "(demo) Try: " + (s.openers[0]||'Keep it light!');
+  const r = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model: "gpt-4o-mini", messages: [{role:"system",content:prompt},{role:"user",content:userMsg}], max_tokens: 120 })
+  });
+  const j = await r.json();
+  return j.choices?.[0]?.message?.content || "Keep it light and fun!";
+}
+
+const PAGES: Record<string, (req?: Request, env?: Env) => string | Promise<string>> = {
+  "/": () => shell("LaughPath", `<div class="pill">DUOLINGO × HEADSPACE FOR HUMOR</div>
       <div class="grid2">
         <div>
           <h1>Feel lighter in minutes.<br/>Become funnier over weeks.</h1>
@@ -195,255 +159,34 @@ const PAGES: Record<string, () => string> = {
           ${SPRIG_SVG}
           <p style="font-size:.9rem;opacity:.75">Click to climb the laugh ladder. Celebrate after a lesson.</p>
         </div>
-      </div>`,
-    ),
-  "/break": () =>
-    shell(
-      "Laugh Break",
-      `<h2>Laugh Break · 60 seconds</h2>
-      <p class="lead">A guided mood reset — not meditation cosplay, not a doomscroll.</p>
-      <div class="card" style="margin-top:1rem">
-        <ol id="break-steps">
-          <li>Unclench your jaw. Drop your shoulders.</li>
-          <li>Name one tiny absurd thing near you (sticky note tyranny, heroic houseplant, etc.).</li>
-          <li>Exhale longer than you inhale, twice.</li>
-          <li>Optional: say the absurd thing out loud in a movie-trailer voice.</li>
-        </ol>
-        <p style="margin-top:1rem"><button class="btn" id="break-go" type="button">Begin 60s reset</button>
-        <button class="btn btn-ghost" id="break-done" type="button" style="margin-left:.5rem">I feel lighter → celebrate</button></p>
-        <div id="break-timer" style="font-size:2rem;font-weight:800;margin-top:1rem"></div>
-        <label style="margin-top:1rem">Mood lift (1–5)
-          <input type="range" min="1" max="5" value="3" id="lift" oninput="window.GiggleSprout&&window.GiggleSprout.laugh(+this.value)"/>
-        </label>
-      </div>
-      ${SPRIG_SVG}`,
-      `document.getElementById('break-go')?.addEventListener('click',()=>{
-        let t=60; const el=document.getElementById('break-timer');
-        const id=setInterval(()=>{ el.textContent=t+'s'; if(--t<0){clearInterval(id); el.textContent='Done'; window.GiggleSprout?.celebrate(); } },1000);
-      });
-      document.getElementById('break-done')?.addEventListener('click',()=>window.GiggleSprout?.celebrate());`,
-    ),
-  "/gym": () =>
-    shell(
-      "Humor Gym",
-      `<h2>Humor Gym · Lesson 1 — Observation</h2>
-      <div class="card">
-        <p><strong>Drill:</strong> Notice three neutral things in your space. Twist one into a gentle surprise. Keep it office-safe.</p>
-        <p><em>Example:</em> “The stapler has unionized. It’s demanding two-staple minimums.”</p>
-        <label>Your twist<textarea id="gym-ans" rows="3" placeholder="Write one line…"></textarea></label>
-        <button class="btn" type="button" id="gym-done">Mark complete</button>
-        <p id="gym-msg" class="notice" style="display:none;margin-top:1rem">Logged locally. Streak +1. Sprig is proud.</p>
-      </div>
-      ${SPRIG_SVG}`,
-      `document.getElementById('gym-done')?.addEventListener('click',()=>{
-        const v=(document.getElementById('gym-ans')||{}).value||'';
-        localStorage.setItem('lp_gym_1', v);
-        window.GiggleSprout?.celebrate();
-        const m=document.getElementById('gym-msg'); if(m) m.style.display='block';
-      });`,
-    ),
-  "/roleplay": () =>
-    shell(
-      "AI Roleplay",
-      `<h2>Safe AI roleplay</h2>
-      <p class="lead">Practice wit in three real-life lanes. Brand-safe only — no hate, no self-harm, no sexual content involving minors, no humiliation coaching.</p>
-      <div class="grid3" style="margin:1rem 0">
-        <button class="card btn-ghost" data-sc="work" type="button"><b>Work meeting</b><br/><span style="font-weight:500;font-size:.85rem">Office-safe banter</span></button>
-        <button class="card btn-ghost" data-sc="date" type="button"><b>Date small-talk</b><br/><span style="font-weight:500;font-size:.85rem">Warm, not creepy</span></button>
-        <button class="card btn-ghost" data-sc="friends" type="button"><b>Friends catch-up</b><br/><span style="font-weight:500;font-size:.85rem">Playful, kind</span></button>
-      </div>
-      <div class="card">
-        <div id="rp-title" style="font-weight:800;margin-bottom:.5rem">Pick a scenario</div>
-        <div class="chat" id="rp-chat">Safety mode on. Choose a lane to get a coached opener.</div>
-        <label style="margin-top:1rem">Your line<textarea id="rp-input" rows="2" placeholder="Type what you’d say…"></textarea></label>
-        <button class="btn" type="button" id="rp-send">Get safe rewrite</button>
-      </div>
-      ${SPRIG_SVG}`,
-      `const SC=${JSON.stringify(SCENARIOS)};
-      let cur='work';
-      function show(sc){
-        cur=sc; const s=SC[sc];
-        document.getElementById('rp-title').textContent=s.title+' · '+s.system;
-        document.getElementById('rp-chat').textContent=s.openers[Math.floor(Math.random()*s.openers.length)];
-        window.GiggleSprout?.say(s.title,1500);
-      }
-      document.querySelectorAll('[data-sc]').forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-sc'))));
-      document.getElementById('rp-send')?.addEventListener('click',async()=>{
-        const line=(document.getElementById('rp-input').value||'').trim();
-        if(!line) return;
-        const chat=document.getElementById('rp-chat');
-        chat.textContent='…';
-        try{
-          const r=await fetch('/api/roleplay',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({scenario:cur,line})});
-          const d=await r.json();
-          chat.innerHTML='<div class="msg-user">You: '+esc(line)+'</div><div class="msg-ai">Coach: '+esc(d.reply||d.error)+'</div>';
-          if(d.safe) window.GiggleSprout?.laugh(2);
-        }catch(e){ chat.textContent=String(e); }
-      });
-      function esc(s){return String(s).replace(/[&<>"']/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));}`,
-    ),
-  "/streak": () =>
-    shell(
-      "Streak",
-      `<h2>Streak & map</h2>
-      <div class="card">
-        <div style="font-size:3rem;font-weight:900"><span id="streak-n">0</span> 🔥</div>
-        <p>Days with a Break, Gym complete, or Roleplay — stored on this device.</p>
-        <div style="height:10px;background:var(--gl-belly);border-radius:999px;overflow:hidden;margin:1rem 0">
-          <div id="streak-bar" style="height:100%;width:10%;background:var(--gl-green)"></div>
-        </div>
-        <a class="btn" href="/break">Protect the streak</a>
-      </div>
-      ${SPRIG_SVG}`,
-      `const n=Number(localStorage.getItem('lp_streak')||0);
-      const el=document.getElementById('streak-n'); if(el) el.textContent=String(n);
-      const bar=document.getElementById('streak-bar'); if(bar) bar.style.width=Math.min(100,n*10)+'%';`,
-    ),
-  "/guides": () =>
-    shell(
-      "Guides",
-      `<h2>Guides</h2>
-      <div class="grid2">
-        <a class="card" href="/guides/how-to-be-witty" style="text-decoration:none;color:inherit"><h3>How to be witty (without being mean)</h3><p>Observation → twist → soft landing.</p></a>
-        <a class="card" href="/guides/stress-laugh-break" style="text-decoration:none;color:inherit"><h3>Funny stress relief that isn’t avoidance</h3><p>60-second resets that keep honesty.</p></a>
-        <a class="card" href="/guides/work-icebreakers" style="text-decoration:none;color:inherit"><h3>Icebreakers for work</h3><p>HR-safe openers that don’t cringe.</p></a>
-        <a class="card" href="/guides/office-safe-rewrites" style="text-decoration:none;color:inherit"><h3>Office-safe joke rewrites</h3><p>Take the edge off without killing the laugh.</p></a>
-      </div>`,
-    ),
-  "/guides/how-to-be-witty": () =>
-    guide(
-      "How to be witty (without being mean)",
-      `<p>Wit is a skill: notice something true, add a surprising angle, land kindly. Mean “roasts” are a different sport — we don’t train those here.</p>
-      <ol><li>Observe a neutral detail.</li><li>Add incongruity (scale, role-reversal, false importance).</li><li>Soft landing: smile, not status attack.</li></ol>
-      <p><a class="btn" href="/gym">Practice in Humor Gym</a></p>`,
-    ),
-  "/guides/stress-laugh-break": () =>
-    guide(
-      "Funny stress relief that isn’t avoidance",
-      `<p>Humor can lower felt stress load — and it can become avoidance. LaughPath Breaks are short, honest, and optional. They don’t “laugh away” crises.</p>
-      <p><a class="btn" href="/break">Do a 60s Break</a></p>`,
-    ),
-  "/guides/work-icebreakers": () =>
-    guide(
-      "Icebreakers for work",
-      `<p>Good work humor is specific, voluntary, and never about protected classes or bodies. Prefer shared objects (“this deck has more versions than a comic-book multiverse”) over personal digs.</p>
-      <p><a class="btn" href="/roleplay">Practice work banter</a></p>`,
-    ),
-  "/guides/office-safe-rewrites": () =>
-    guide(
-      "Office-safe joke rewrites",
-      `<p>Take a sharp impulse and rewrite: remove targets, keep the absurdity. Example: “My laptop is older than some interns” → “This laptop has tenure.”</p>
-      <p><a class="btn" href="/roleplay">Rewrite with coach</a></p>`,
-    ),
-  "/about": () =>
-    shell(
-      "About",
-      `<h2>About LaughPath</h2>
-      <p class="lead">LaughPath is the product on growinglaughs.com: Duolingo meets Headspace for humor. Feel lighter in minutes; become funnier over weeks.</p>
-      <p>Audience v1 is adults 18–34. We defer family/kids mode for safety and moderation reasons. We make no medical or therapy claims.</p>
-      <p>Mascot: Sprig the Giggle Sprout — laughs with you, celebrates streaks, grows with skill.</p>`,
-    ),
-  "/privacy": () =>
-    shell(
-      "Privacy",
-      `<h2>Privacy</h2>
-      <p>Streak and practice notes default to your browser (localStorage). Age gate: 16+. We do not sell personal data. If ads appear on content pages later, we disclose third-party ad cookies (Google AdSense) and advertising partners in this policy.</p>
-      <p>Roleplay inputs may be processed to generate safe rewrites; do not submit secrets or health diagnoses.</p>
-      <p>Contact: privacy@growinglaughs.com (or portfolio contact path).</p>`,
-    ),
+      </div>`),
+  "/roleplay": async (req, env) => {
+    if (req?.method === "POST") {
+      const fd = await req.formData();
+      const sc = String(fd.get("scenario")||"work");
+      const msg = String(fd.get("msg")||"");
+      const rank = String(fd.get("rank")||"5");
+      const ai = await roleplayAI(env!, sc, msg, rank);
+      return JSON.stringify({reply: ai});
+    }
+    const opts = Object.keys(SCENARIOS).map(k=>`<option value="${k}">${SCENARIOS[k].title}</option>`).join("");
+    return shell("Roleplay", `<h2>AI Roleplay Coach</h2><p class="lead">3 brand-safe scenarios. Rank funniness + safety. No therapy claims.</p>
+    <div class="card"><form id="rp"><label>Scenario<select name="scenario">${opts}</select></label><label>Your line<textarea name="msg" rows="2" placeholder="Type what you said..."></textarea></label><label>Rank funniness+safety (1-5)<input name="rank" type="number" min="1" max="5" value="5"></label><button class="btn" type="submit">Get Sprig reply</button></form><div id="out" class="chat"></div></div>
+    <script>document.getElementById('rp').onsubmit=async e=>{e.preventDefault();const fd=new FormData(e.target);const r=await fetch('/roleplay',{method:'POST',body:fd});const j=await r.json();document.getElementById('out').innerHTML='<div class="msg-ai">'+j.reply+'</div>';};</script>`);
+  },
+  "/break": () => shell("Laugh Break", `<h2>Laugh Break · 60 seconds</h2><p class="lead">A guided mood reset — not meditation cosplay, not a doomscroll.</p><div class="card" style="margin-top:1rem"><ol id="break-steps"><li>Unclench your jaw. Drop your shoulders.</li><li>Name one tiny absurd thing near you.</li><li>Exhale longer than you inhale, twice.</li><li>Optional: say the absurd thing out loud in a movie-trailer voice.</li></ol><p style="margin-top:1rem"><button class="btn" id="break-go" type="button">Begin 60s reset</button><button class="btn btn-ghost" id="break-done" type="button" style="margin-left:.5rem">I feel lighter → celebrate</button></p><div id="break-timer" style="font-size:2rem;font-weight:800;margin-top:1rem"></div></div>`),
 };
-
-function guide(title: string, html: string) {
-  return shell(title, `<h2>${title}</h2><div class="card">${html}</div><p style="margin-top:1rem"><a href="/guides">← All guides</a></p>`);
-}
-
-function safeRewrite(scenario: string, line: string): { reply: string; safe: boolean } {
-  const lower = line.toLowerCase();
-  const banned =
-    /(kill yourself|kys|nazi|rape|nigger|faggot|kill (him|her|them)|bomb )/i.test(line) ||
-    /(child|minor|underage).{0,20}(sex|nude)/i.test(line);
-  if (banned) {
-    return {
-      reply: "Blocked for safety. Keep it brand-safe: no hate, self-harm, or sexual content involving minors. Try a lighter observation.",
-      safe: false,
-    };
-  }
-  if (line.length < 3) return { reply: "Give me a real line to rewrite.", safe: false };
-  const sc = SCENARIOS[scenario] || SCENARIOS.work;
-  // Lightweight coach rewrite templates
-  let reply = `Safer rewrite (${sc.title}): “${line.replace(/[!?]+$/, "")} — and I’m only half kidding.”`;
-  if (/stupid|idiot|hate|ugly|fat|dumb/i.test(line)) {
-    reply =
-      "Softened: drop the insult, keep the absurdity. Try targeting the situation not the person: “This process has more plot twists than a streaming drama.”";
-  } else if (scenario === "work") {
-    reply = `Office-safe option: “${line.slice(0, 120)}” → add a shared object and a smile: “Meanwhile my calendar thinks I’m a Tetris block.”`;
-  } else if (scenario === "date") {
-    reply = `Warm option: acknowledge + curiosity. “${line.slice(0, 80)}” becomes “That’s actually interesting — how’d you get into that?”`;
-  } else {
-    reply = `Friend-safe option: tease the situation, not the person. Land with warmth.`;
-  }
-  if (lower.includes("openclaw") || lower.includes("mac mini")) {
-    reply += " (Meta: personal AI setup humor is fine; keep secrets out of chat.)";
-  }
-  return { reply, safe: true };
-}
-
-function asset(path: string, type: string, body: string) {
-  return new Response(body, {
-    headers: { "content-type": type, "cache-control": "public, max-age=86400" },
-  });
-}
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-    let p = url.pathname.replace(/\/+$/, "") || "/";
-
-    // API
-    if (p === "/api/health") {
-      return Response.json({ ok: true, product: "LaughPath", domain: "growinglaughs.com" });
+    const p = PAGES[url.pathname];
+    if (p) {
+      const body = await p(request, env);
+      const ct = url.pathname === "/roleplay" && request.method === "POST" ? "application/json" : "text/html";
+      return new Response(body, { headers: { "content-type": ct + "; charset=utf-8" } });
     }
-    if (p === "/api/roleplay" && request.method === "POST") {
-      const body = (await request.json().catch(() => ({}))) as { scenario?: string; line?: string };
-      const out = safeRewrite(String(body.scenario || "work"), String(body.line || ""));
-      return Response.json(out);
-    }
-
-    // Prefer static brand files from ASSETS when present
-    if (p === "/favicon.svg" || p === "/logo-full.svg" || p === "/logo-mono.svg" || p === "/gs-mascot.js") {
-      if (env.ASSETS) {
-        const a = await env.ASSETS.fetch(request);
-        if (a.status !== 404) return a;
-      }
-      if (p === "/gs-mascot.js") return asset(p, "application/javascript; charset=utf-8", GS_JS);
-      if (p === "/favicon.svg")
-        return asset(
-          p,
-          "image/svg+xml",
-          `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#3FBF4E"/><circle cx="32" cy="36" r="16" fill="#B9EFAB"/><circle cx="26" cy="32" r="3" fill="#26332B"/><circle cx="38" cy="32" r="3" fill="#26332B"/><path d="M24 42q8 8 16 0" stroke="#2E9E3C" stroke-width="3" fill="none"/></svg>`,
-        );
-    }
-
-    if (request.method === "GET" || request.method === "HEAD") {
-      const page = PAGES[p];
-      if (page) {
-        return new Response(page(), {
-          headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=60" },
-        });
-      }
-    }
-
-    if (env.ASSETS) {
-      try {
-        const a = await env.ASSETS.fetch(request);
-        if (a.status !== 404) return a;
-      } catch {
-        /* ignore */
-      }
-    }
-    return new Response(PAGES["/"](), {
-      status: 404,
-      headers: { "content-type": "text/html; charset=utf-8" },
-    });
+    if (env.ASSETS) return env.ASSETS.fetch(request);
+    return new Response("Not found", { status: 404 });
   },
 };
