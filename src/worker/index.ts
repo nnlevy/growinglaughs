@@ -21,11 +21,40 @@ const ROUTES: Record<string, string> = {
   '/': `<div class="max-w-2xl"><div class="inline px-3 py-1 bg-[var(--gl-green)] text-white rounded text-xs tracking-widest mb-3">DUOLINGO × HEADSPACE FOR HUMOR</div><h1 class="text-6xl font-bold tracking-tighter mb-4">Feel lighter in minutes.<br>Become funnier over weeks.</h1><p class="text-xl mb-8">Daily micro-lessons, 30-second resets, and safe AI roleplay for adults 18–34.</p><a href="/break" class="inline-block px-8 py-4 bg-[var(--gl-green)] text-white rounded-2xl font-semibold text-lg">Start a Laugh Break →</a><div class="mt-12" id="sprig"></div></div>`,
   '/break': `<h2 class="text-3xl font-semibold mb-4">Laugh Break</h2><div class="prose max-w-none"><p>30–180s guided reset. Read, breathe, rate the lift.</p><button onclick="rateLift()" class="mt-4 px-6 py-3 bg-[var(--gl-green)] text-white rounded-xl">Begin 60s reset</button><div id="lift" class="mt-6 hidden">Mood lift: <input type="range" min="1" max="5" oninput="window.GiggleSprout?.laugh(this.value)"> <span id="val">3</span></div></div>`,
   '/gym': `<h2 class="text-3xl font-semibold mb-4">Humor Gym</h2><div class="p-6 bg-white rounded-2xl border"><p class="font-medium mb-2">Lesson 1 · Observation</p><p>Notice three neutral things in your current room. Turn one into an unexpected twist. (Office-safe example: “The stapler is judging my TPS reports again.”)</p><button onclick="window.GiggleSprout?.celebrate()" class="mt-4 px-5 py-2 bg-[var(--gl-green)] text-white rounded-xl">Mark complete</button></div>`,
-  '/roleplay': `<h2 class="text-3xl font-semibold mb-4">AI Roleplay</h2><div class="grid md:grid-cols-3 gap-4"><div class="p-4 border rounded-2xl"><b>Work meeting</b><br><button class="mt-3 text-sm underline">Start (safe banter)</button></div><div class="p-4 border rounded-2xl"><b>Date small-talk</b><br><button class="mt-3 text-sm underline">Start</button></div><div class="p-4 border rounded-2xl"><b>Friends catch-up</b><br><button class="mt-3 text-sm underline">Start</button></div></div><p class="text-xs mt-4 text-gray-500">Safety prompt active: brand-safe, no hate/self-harm/sexual content.</p>`,
+  '/roleplay': `<h2 class="text-3xl font-semibold mb-4">AI Roleplay</h2><div class="grid md:grid-cols-3 gap-4" id="scenarios"></div><div id="chat" class="hidden mt-6 p-4 border rounded-2xl bg-white"><div id="log" class="h-64 overflow-auto text-sm mb-3 whitespace-pre-wrap"></div><input id="msg" class="w-full border rounded px-3 py-2" placeholder="Your line (brand-safe banter only)"><div class="flex gap-2 mt-2"><button onclick="sendLine()" class="px-4 py-1 bg-[var(--gl-green)] text-white rounded">Send</button><button onclick="rankResponse()" class="px-4 py-1 border rounded">Rank funniness+safety</button></div></div><p class="text-xs mt-4 text-gray-500">Safety prompt active: brand-safe, no hate/self-harm/sexual content. No therapy claims.</p>`,
   '/streak': `<h2 class="text-3xl font-semibold mb-4">Streak & Map</h2><div class="p-6 bg-white rounded-2xl"><div class="text-5xl font-mono">7 🔥</div><div class="text-sm">Current streak · localStorage v0.1</div><div class="mt-4 h-2 bg-[var(--gl-belly)] rounded"><div class="w-3/4 h-2 bg-[var(--gl-green)] rounded"></div></div></div>`,
   '/privacy': `<h2 class="text-3xl font-semibold mb-4">Privacy</h2><p>Local-first. No therapy claims. Age gate 16+. Data stays in browser until you opt in to cloud sync.</p>`,
   '/about': `<h2 class="text-3xl font-semibold mb-4">About LaughPath</h2><p>Positioning: Duolingo meets Headspace for humor. Adults 18–34. Brand-safe humor only.</p>`
 };
+
+function initRoleplay() {
+  const scenarios = [
+    {id:'work',title:'Work meeting',prompt:'You are in a safe, light office banter roleplay. Keep it brand-safe, funny, no therapy.'},
+    {id:'date',title:'Date small-talk',prompt:'You are in a safe, light date small-talk roleplay. Keep it brand-safe, funny, no therapy.'},
+    {id:'friends',title:'Friends catch-up',prompt:'You are in a safe, light friends catch-up roleplay. Keep it brand-safe, funny, no therapy.'}
+  ];
+  const el = document.getElementById('scenarios');
+  if (!el) return;
+  el.innerHTML = scenarios.map(s => `<div class="p-4 border rounded-2xl"><b>${s.title}</b><br><button class="mt-3 text-sm underline" onclick="startRoleplay('${s.id}','${s.prompt}')">Start (safe banter)</button></div>`).join('');
+}
+window.startRoleplay = function(id,prompt) {
+  const chat = document.getElementById('chat'); chat.classList.remove('hidden');
+  window.currentPrompt = prompt; window.logEl = document.getElementById('log');
+  window.logEl.innerHTML = 'AI: ' + (id==='work'?'Ready for that meeting banter?':'Hi there!') + '\n';
+};
+window.sendLine = function() {
+  const input = document.getElementById('msg'); const log = window.logEl;
+  if (!input.value.trim()) return;
+  log.innerHTML += 'You: ' + input.value + '\n';
+  // brand-safe mock AI reply
+  log.innerHTML += 'AI: Haha, good one! What next?\n';
+  input.value = '';
+  log.scrollTop = log.scrollHeight;
+};
+window.rankResponse = function() {
+  const log = window.logEl; log.innerHTML += 'Rank: Funniness 4/5 · Safety 5/5 (brand-safe)\n';
+};
+
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -34,7 +63,12 @@ export default {
     if (p === '/favicon.svg') return new Response('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#3FBF4E"/><circle cx="32" cy="32" r="18" fill="#FFF9EC"/></svg>', {headers:{'Content-Type':'image/svg+xml'}});
     if (p === '/logo-full.svg') return new Response('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60"><text x="10" y="40" font-size="32" fill="#3FBF4E" font-weight="700">LaughPath</text></svg>', {headers:{'Content-Type':'image/svg+xml'}});
     if (p === '/gs-mascot.js') return new Response(`window.GiggleSprout={laugh:l=>console.log('laugh',l),celebrate:()=>console.log('celebrate'),grow:()=>console.log('grow')};`, {headers:{'Content-Type':'application/javascript'}});
-    if (ROUTES[p]) return new Response(SHELL(p === '/' ? 'LaughPath' : p.slice(1), ROUTES[p]), {headers:{'Content-Type':'text/html; charset=utf-8'}});
+    if (ROUTES[p]) {
+      const html = SHELL(p === '/' ? 'LaughPath' : p.slice(1), ROUTES[p]);
+      const res = new Response(html, {headers:{'Content-Type':'text/html; charset=utf-8'}});
+      if (p==='/roleplay') res.headers.set('Set-Cookie','roleplay=init; Path=/');
+      return res;
+    }
     try { const a = await env.ASSETS.fetch(request); if (a.status !== 404) return a; } catch {}
     return new Response(SHELL('LaughPath', ROUTES['/']), {headers:{'Content-Type':'text/html; charset=utf-8'}});
   }

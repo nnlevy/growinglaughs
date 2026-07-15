@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "prompt_id": "gl-laughpath-mvp-sprig-shell-20260715",
+  "prompt_id": "gl-1.0-ai-roleplay-safety-20260715",
   "domain": "growinglaughs.com",
   "execution_class": "cloud_code",
   "written": [
@@ -16,5 +16,5 @@
     "surface": "xai_api",
     "deprecated": null
   },
-  "model_summary": "Replace worker with LaughPath MVP shell + Sprig brand + all core routes"
+  "model_summary": "Wire /roleplay interactive with brand-safe mock AI + ranking"
 }
