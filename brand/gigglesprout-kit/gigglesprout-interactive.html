@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprig — the Giggle Sprout · growinglaughs.com</title>
+<style>
+  :root{
+    --gl-green:#3FBF4E; --gl-green-dark:#2E9E3C; --gl-leaf:#57D463;
+    --gl-sun:#FFC93C; --gl-ink:#26332B; --gl-cream:#FFF9EC; --gl-tear:#7FD4FF;
+  }
+  *{box-sizing:border-box} body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--gl-cream);color:var(--gl-ink);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px}
+  h1{font-size:22px;margin:0} p.sub{margin:0;opacity:.7;font-size:14px}
+
+  /* ============ EMBEDDABLE MASCOT (copy from here down + the JS) ============ */
+  .gs-stage{position:relative;width:min(320px,80vw);user-select:none;-webkit-tap-highlight-color:transparent}
+  .gs-stage svg{width:100%;height:auto;display:block;cursor:pointer;overflow:visible}
+
+  /* idle bob + sway */
+  .gs-body-wrap{transform-origin:120px 240px;animation:gs-bob 3.4s ease-in-out infinite}
+  @keyframes gs-bob{0%,100%{transform:translateY(0) rotate(0deg)}30%{transform:translateY(-5px) rotate(-1.2deg)}70%{transform:translateY(-2px) rotate(1.2deg)}}
+
+  /* leaves gently breathe */
+  .gs-leaf-l,.gs-leaf-r{transform-origin:120px 78px;transition:transform .3s ease}
+  .gs-leaf-l{animation:gs-leafL 4s ease-in-out infinite}
+  .gs-leaf-r{animation:gs-leafR 4s ease-in-out infinite}
+  @keyframes gs-leafL{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-6deg)}}
+  @keyframes gs-leafR{0%,100%{transform:rotate(0deg)}50%{transform:rotate(6deg)}}
+  .gs-stage:hover .gs-leaf-l{transform:rotate(-14deg)}
+  .gs-stage:hover .gs-leaf-r{transform:rotate(14deg)}
+
+  /* ---- LAUGH LEVELS ---- */
+  /* L1 chuckle: two quick polite bounces */
+  .gs-stage.lv1 .gs-body-wrap{animation:gs-chuckle .4s ease-in-out 2}
+  @keyframes gs-chuckle{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.02,.96)}}
+  /* L2 giggle: classic squash & stretch */
+  .gs-stage.lv2 .gs-body-wrap{animation:gs-laugh .55s ease-in-out infinite}
+  @keyframes gs-laugh{
+    0%,100%{transform:translateY(0) scale(1,1)}
+    25%{transform:translateY(6px) scale(1.06,.92)}
+    50%{transform:translateY(-10px) scale(.95,1.07)}
+    75%{transform:translateY(3px) scale(1.04,.94)}
+  }
+  /* L3 cracking up: same but frantic */
+  .gs-stage.lv3 .gs-body-wrap{animation:gs-laugh .34s ease-in-out infinite}
+  /* L4 ROFL: stomach hurts — rocking, clutching, big squash */
+  .gs-stage.lv4 .gs-body-wrap{animation:gs-rofl .48s ease-in-out infinite}
+  @keyframes gs-rofl{
+    0%,100%{transform:rotate(-9deg) translateY(4px) scale(1.07,.90)}
+    50%{transform:rotate(9deg) translateY(-14px) scale(.92,1.10)}
+  }
+  /* L5 helicopter: rotor leaves + liftoff */
+  .gs-stage.lv5 .gs-body-wrap{animation:gs-fly 3.2s ease-in-out forwards}
+  @keyframes gs-fly{
+    0%{transform:translateY(0) rotate(0)}
+    18%{transform:translateY(-100px) rotate(-5deg)}
+    38%{transform:translateY(-88px) rotate(5deg)}
+    58%{transform:translateY(-102px) rotate(-4deg)}
+    78%{transform:translateY(-90px) rotate(3deg)}
+    100%{transform:translateY(0) rotate(0)}
+  }
+  .gs-stage.lv5 .gs-leaf-l,.gs-stage.lv5 .gs-leaf-r{animation:gs-rotor .1s linear infinite}
+  @keyframes gs-rotor{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
+  .gs-rotor-blur{visibility:hidden}
+  .gs-stage.lv5 .gs-rotor-blur{visibility:visible;animation:gs-blurpulse .2s linear infinite}
+  @keyframes gs-blurpulse{0%,100%{opacity:.18}50%{opacity:.32}}
+
+  /* leaf shake during L2–L4 */
+  .gs-stage.lv2 .gs-leaf-l,.gs-stage.lv3 .gs-leaf-l,.gs-stage.lv4 .gs-leaf-l{animation:gs-shakeL .3s linear infinite}
+  .gs-stage.lv2 .gs-leaf-r,.gs-stage.lv3 .gs-leaf-r,.gs-stage.lv4 .gs-leaf-r{animation:gs-shakeR .3s linear infinite}
+  @keyframes gs-shakeL{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(2deg)}}
+  @keyframes gs-shakeR{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-2deg)}}
+
+  /* grow: spring up + new bud */
+  .gs-stage.growing .gs-body-wrap{animation:gs-growup 1s cubic-bezier(.3,1.8,.4,1) 1}
+  @keyframes gs-growup{0%{transform:scale(1)}55%{transform:scale(1.15,1.2)}80%{transform:scale(.98,1.02)}100%{transform:scale(1)}}
+  .gs-bud{transform-origin:120px 66px;transform:scale(0);transition:transform .5s cubic-bezier(.3,2.2,.4,1)}
+  .gs-bud.pop{transform:scale(1)}
+
+  /* celebrate jump */
+  .gs-stage.celebrating .gs-body-wrap{animation:gs-jump .6s cubic-bezier(.3,1.6,.5,1) 3}
+  @keyframes gs-jump{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-34px) scale(1.05)}55%{transform:translateY(-30px) rotate(6deg)}}
+
+  /* sleepy droop */
+  .gs-stage.sleepy .gs-body-wrap{animation:gs-snooze 5s ease-in-out infinite}
+  @keyframes gs-snooze{0%,100%{transform:translateY(2px) rotate(-2.5deg)}50%{transform:translateY(5px) rotate(-4deg)}}
+  .gs-stage.sleepy .gs-leaf-l{transform:rotate(10deg)}
+  .gs-stage.sleepy .gs-leaf-r{transform:rotate(-10deg)}
+
+  /* floating word particles */
+  .gs-particle{position:absolute;font-weight:800;pointer-events:none;animation:gs-float 1.3s ease-out forwards;text-shadow:0 1px 0 #fff}
+  @keyframes gs-float{0%{opacity:0;transform:translate(0,0) scale(.5) rotate(0deg)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-110px) scale(1.15) rotate(var(--rot))}}
+
+  /* falling tear drops */
+  .gs-drop{position:absolute;width:8px;height:11px;background:var(--gl-tear);border-radius:50% 50% 55% 55%;pointer-events:none;animation:gs-fall var(--t,.65s) ease-in forwards;opacity:.9}
+  @keyframes gs-fall{0%{transform:translateY(0) scale(.7)}100%{transform:translateY(var(--fall,120px)) scale(1)}}
+
+  .gs-zzz{position:absolute;font-weight:700;color:var(--gl-green-dark);opacity:0;pointer-events:none;animation:gs-zfloat 2.6s ease-out infinite}
+  @keyframes gs-zfloat{0%{opacity:0;transform:translate(0,0) scale(.6)}25%{opacity:.8}100%{opacity:0;transform:translate(26px,-70px) scale(1.2)}}
+
+  /* speech bubble */
+  .gs-bubble{position:absolute;left:50%;top:-14px;transform:translate(-50%,-100%) scale(.7);opacity:0;background:#fff;border:3px solid var(--gl-ink);border-radius:16px;padding:10px 16px;font-weight:700;font-size:15px;white-space:nowrap;transition:all .25s cubic-bezier(.3,1.5,.5,1);pointer-events:none;box-shadow:0 4px 0 rgba(38,51,43,.15);z-index:2}
+  .gs-bubble::after{content:'';position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--gl-ink)}
+  .gs-bubble.show{opacity:1;transform:translate(-50%,-100%) scale(1)}
+
+  /* demo controls (not part of embed) */
+  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:560px}
+  .controls button{background:var(--gl-green);color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 3px 0 var(--gl-green-dark);transition:transform .1s}
+  .controls button:active{transform:translateY(2px);box-shadow:none}
+  .controls button.alt{background:var(--gl-sun);color:var(--gl-ink);box-shadow:0 3px 0 #d9a520}
+  .hint{font-size:13px;opacity:.6;text-align:center;max-width:460px}
+</style>
+</head>
+<body>
+
+<h1>Meet Sprig 🌱 the Giggle Sprout</h1>
+<p class="sub">growinglaughs.com — grow your funny, five minutes a day</p>
+
+<div class="gs-stage" id="gsStage" aria-label="Sprig the Giggle Sprout mascot" role="img">
+  <div class="gs-bubble" id="gsBubble"></div>
+  <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="gsBodyGrad" cx="50%" cy="38%" r="75%">
+        <stop offset="0%" stop-color="#5ED267"/><stop offset="100%" stop-color="#3FBF4E"/>
+      </radialGradient>
+      <linearGradient id="gsLeafGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#6FE07A"/><stop offset="100%" stop-color="#3FBF4E"/>
+      </linearGradient>
+    </defs>
+
+    <!-- soft shadow -->
+    <ellipse cx="120" cy="272" rx="62" ry="10" fill="#26332B" opacity="0.10"/>
+    <!-- tear puddle (grows when he cries laughing) -->
+    <ellipse id="gsPuddle" cx="120" cy="278" rx="0" ry="7" fill="#7FD4FF" opacity="0.75"/>
+
+    <g class="gs-body-wrap">
+      <!-- rotor blur disc (helicopter mode) -->
+      <ellipse class="gs-rotor-blur" cx="120" cy="60" rx="56" ry="11" fill="#57D463"/>
+
+      <!-- stem + leaves -->
+      <path d="M120 100 Q118 84 120 72" stroke="#2E9E3C" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path class="gs-leaf-l" d="M120 78 Q84 74 74 46 Q108 42 120 72 Z" fill="url(#gsLeafGrad)" stroke="#2E9E3C" stroke-width="3" stroke-linejoin="round"/>
+      <path class="gs-leaf-r" d="M120 78 Q156 74 166 46 Q132 42 120 72 Z" fill="url(#gsLeafGrad)" stroke="#2E9E3C" stroke-width="3" stroke-linejoin="round"/>
+      <!-- growth bud (appears via grow()) -->
+      <path class="gs-bud" id="gsBud" d="M120 70 Q118 56 106 50 Q116 46 122 56 Q124 64 120 70 Z" fill="#6FE07A" stroke="#2E9E3C" stroke-width="2.5" stroke-linejoin="round"/>
+
+      <!-- body -->
+      <path d="M120 96 C66 96 42 142 42 192 C42 244 76 270 120 270 C164 270 198 244 198 192 C198 142 174 96 120 96 Z"
+            fill="url(#gsBodyGrad)" stroke="#2E9E3C" stroke-width="4"/>
+
+      <!-- eyes (open) -->
+      <g class="gs-eye-open" id="gsEyes">
+        <g class="gs-eye" data-cx="92" data-cy="164">
+          <ellipse cx="92" cy="164" rx="15" ry="17" fill="#fff" stroke="#26332B" stroke-width="2.5"/>
+          <g class="gs-pupil"><circle cx="92" cy="166" r="6.5" fill="#26332B"/><circle cx="94.5" cy="163" r="2.2" fill="#fff"/></g>
+          <ellipse class="gs-lid" cx="92" cy="164" rx="16" ry="18" fill="#3FBF4E" style="transform-origin:92px 148px;transform:scaleY(0);transition:transform .08s"/>
+        </g>
+        <g class="gs-eye" data-cx="148" data-cy="164">
+          <ellipse cx="148" cy="164" rx="15" ry="17" fill="#fff" stroke="#26332B" stroke-width="2.5"/>
+          <g class="gs-pupil"><circle cx="148" cy="166" r="6.5" fill="#26332B"/><circle cx="150.5" cy="163" r="2.2" fill="#fff"/></g>
+          <ellipse class="gs-lid" cx="148" cy="164" rx="16" ry="18" fill="#3FBF4E" style="transform-origin:148px 148px;transform:scaleY(0);transition:transform .08s"/>
+        </g>
+      </g>
+      <!-- eyes (laughing ^ ^) -->
+      <g class="gs-eye-laugh" id="gsEyesLaugh" visibility="hidden">
+        <path d="M79 168 Q92 154 105 168" stroke="#26332B" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M135 168 Q148 154 161 168" stroke="#26332B" stroke-width="5" fill="none" stroke-linecap="round"/>
+      </g>
+      <!-- tear streaks at eye corners (L3+) -->
+      <g id="gsTears" visibility="hidden">
+        <path d="M72 172 q-6 9 0 14 q7 -5 0 -14 Z" fill="#7FD4FF"/>
+        <path d="M168 172 q6 9 0 14 q-7 -5 0 -14 Z" fill="#7FD4FF"/>
+      </g>
+
+      <!-- brows -->
+      <path id="gsBrowL" d="M80 140 Q92 134 104 140" stroke="#2E9E3C" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path id="gsBrowR" d="M136 140 Q148 134 160 140" stroke="#2E9E3C" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+      <!-- mouth -->
+      <path id="gsMouth" d="M98 202 Q120 220 142 202" stroke="#26332B" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <g id="gsMouthOpen" visibility="hidden">
+        <path id="gsMouthOpenPath" d="M88 198 Q120 248 152 198 Q120 210 88 198 Z" fill="#26332B"/>
+        <path id="gsTongue" d="M104 220 Q120 236 136 220 Q120 244 104 220 Z" fill="#FF7B8E"/>
+      </g>
+
+      <!-- little arms: hidden by default, clutch belly at L4 -->
+      <g id="gsArms" visibility="hidden">
+        <path d="M56 200 Q78 216 100 224" stroke="#2E9E3C" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <path d="M184 200 Q162 216 140 224" stroke="#2E9E3C" stroke-width="9" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- tiny feet -->
+      <ellipse cx="96" cy="268" rx="16" ry="8" fill="#2E9E3C"/>
+      <ellipse cx="144" cy="268" rx="16" ry="8" fill="#2E9E3C"/>
+    </g>
+  </svg>
+</div>
+
+<div class="controls">
+  <button onclick="GiggleSprout.laugh(1)">😏 Chuckle</button>
+  <button onclick="GiggleSprout.laugh(2)">😄 Giggle</button>
+  <button onclick="GiggleSprout.laugh(3)">😂 Crack up</button>
+  <button onclick="GiggleSprout.laugh(4)">🤣 ROFL</button>
+  <button onclick="GiggleSprout.laugh(5)">🚁 Heli-LOL</button>
+  <button class="alt" onclick="GiggleSprout.grow()">🌱 Grow</button>
+  <button class="alt" onclick="GiggleSprout.celebrate()">🎉 Celebrate</button>
+  <button class="alt" id="soundBtn" onclick="GiggleSprout.toggleSound()">🔇 Sound: off</button>
+</div>
+<p class="hint">Click Sprig repeatedly and the laughter escalates: chuckle → giggle → cracking up (tears) → stomach-hurting ROFL (tear puddles!) → leaves spin into a helicopter and he lifts off. Ignore him 20s and he naps.</p>
+
+<script>
+(function(){
+  const stage=document.getElementById('gsStage');
+  const svg=stage.querySelector('svg');
+  const eyes=[...stage.querySelectorAll('.gs-eye')];
+  const eyesOpen=document.getElementById('gsEyes');
+  const eyesLaugh=document.getElementById('gsEyesLaugh');
+  const mouth=document.getElementById('gsMouth');
+  const mouthOpen=document.getElementById('gsMouthOpen');
+  const tears=document.getElementById('gsTears');
+  const arms=document.getElementById('gsArms');
+  const puddle=document.getElementById('gsPuddle');
+  const bud=document.getElementById('gsBud');
+  const bubble=document.getElementById('gsBubble');
+
+  const MOUTHS={
+    idle:'M98 202 Q120 220 142 202',
+    happy:'M92 200 Q120 230 148 200',
+    sleepy:'M112 206 Q120 214 128 206',
+  };
+  const LEVELS={
+    1:{cls:'lv1',dur:1100,n:2,big:false,tearRate:0,openMouth:false,words:['heh','heh heh','pfft']},
+    2:{cls:'lv2',dur:1700,n:4,big:false,tearRate:0,openMouth:true,words:['ha!','haha','hehe']},
+    3:{cls:'lv3',dur:2300,n:6,big:true,tearRate:220,openMouth:true,words:['HAHA','HA!','lolol']},
+    4:{cls:'lv4',dur:3000,n:9,big:true,tearRate:120,openMouth:true,words:['HAHAHA','WHEEZE','I CAN\'T'],say:'ow ow my stomach 😂'},
+    5:{cls:'lv5',dur:3300,n:12,big:true,tearRate:90,openMouth:true,words:['HAHAHA','WEEEE','🚁'],say:'I\'M AIRBORNE hahaha!'}
+  };
+  const LEVEL_CLASSES='lv1 lv2 lv3 lv4 lv5';
+
+  let mood='idle', level=0, laughTimer=null, idleTimer=null, streakTimer=null;
+  let soundOn=false, audioCtx=null, zzzEls=[], tearInt=null, puddleR=0, puddleDecay=null;
+
+  /* ---------- eye tracking ---------- */
+  document.addEventListener('mousemove',e=>{
+    if(mood==='laugh')return;
+    wake();
+    const r=svg.getBoundingClientRect(), sc=r.width/240;
+    eyes.forEach(eye=>{
+      const cx=r.left+eye.dataset.cx*sc, cy=r.top+eye.dataset.cy*sc;
+      const a=Math.atan2(e.clientY-cy,e.clientX-cx);
+      const d=Math.min(5,Math.hypot(e.clientX-cx,e.clientY-cy)/40);
+      eye.querySelector('.gs-pupil').setAttribute('transform',
+        `translate(${(Math.cos(a)*d).toFixed(1)} ${(Math.sin(a)*d).toFixed(1)})`);
+    });
+  },{passive:true});
+
+  /* ---------- blinking ---------- */
+  function blink(){
+    if(mood!=='laugh'){
+      stage.querySelectorAll('.gs-lid').forEach(l=>{l.style.transform='scaleY(1)';
+        setTimeout(()=>l.style.transform=mood==='sleepy'?'scaleY(.55)':'scaleY(0)',110);});
+    }
+    setTimeout(blink,1800+Math.random()*3200);
+  }
+  setTimeout(blink,1500);
+
+  /* ---------- particles ---------- */
+  const COLORS=['#3FBF4E','#FFC93C','#2E9E3C','#26332B'];
+  function particle(txt,big){
+    const p=document.createElement('span');
+    p.className='gs-particle'; p.textContent=txt;
+    p.style.left=(28+Math.random()*44)+'%'; p.style.top=(24+Math.random()*22)+'%';
+    p.style.fontSize=(big?20:13)+Math.random()*10+'px';
+    p.style.color=COLORS[Math.random()*COLORS.length|0];
+    p.style.setProperty('--dx',(Math.random()*80-40)+'px');
+    p.style.setProperty('--rot',(Math.random()*40-20)+'deg');
+    stage.appendChild(p); setTimeout(()=>p.remove(),1300);
+  }
+  function confetti(){for(let i=0;i<14;i++)setTimeout(()=>particle(['🌱','⭐','🎉','✨'][i%4],true),i*70);}
+
+  /* ---------- tear drops + puddle ---------- */
+  function dropTear(fromHigh){
+    const d=document.createElement('span');
+    d.className='gs-drop';
+    d.style.left=(Math.random()<.5?30:64)+(Math.random()*4-2)+'%';
+    d.style.top=(fromHigh?18+Math.random()*10:52)+'%';
+    d.style.setProperty('--fall',(fromHigh?200:110)+Math.random()*20+'px');
+    d.style.setProperty('--t',(fromHigh?.85:.6)+'s');
+    stage.appendChild(d);
+    setTimeout(()=>{d.remove();growPuddle();},fromHigh?850:600);
+  }
+  function growPuddle(){
+    if(level<4)return;
+    puddleR=Math.min(64,puddleR+5);
+    puddle.setAttribute('rx',puddleR);
+  }
+  function startTears(rate,fromHigh){
+    stopTears();
+    if(rate)tearInt=setInterval(()=>dropTear(fromHigh),rate);
+  }
+  function stopTears(){clearInterval(tearInt);tearInt=null;}
+  function decayPuddle(){
+    clearInterval(puddleDecay);
+    puddleDecay=setInterval(()=>{
+      puddleR=Math.max(0,puddleR-3);
+      puddle.setAttribute('rx',puddleR);
+      if(!puddleR)clearInterval(puddleDecay);
+    },260);
+  }
+
+  /* ---------- sound (synth giggle, off by default) ---------- */
+  function giggleSound(n){
+    if(!soundOn)return;
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const t0=audioCtx.currentTime;
+    for(let i=0;i<n;i++){
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type='triangle'; o.frequency.setValueAtTime(420+i*70+Math.random()*40,t0+i*.09);
+      o.frequency.exponentialRampToValueAtTime(700+i*60,t0+i*.09+.07);
+      g.gain.setValueAtTime(0,t0+i*.09); g.gain.linearRampToValueAtTime(.12,t0+i*.09+.02);
+      g.gain.exponentialRampToValueAtTime(.001,t0+i*.09+.09);
+      o.connect(g).connect(audioCtx.destination); o.start(t0+i*.09); o.stop(t0+i*.09+.1);
+    }
+  }
+
+  /* ---------- mood engine ---------- */
+  function clearMoodVisuals(){
+    stage.classList.remove('sleepy','celebrating','growing',...LEVEL_CLASSES.split(' '));
+    eyesOpen.setAttribute('visibility','visible');
+    eyesLaugh.setAttribute('visibility','hidden');
+    mouthOpen.setAttribute('visibility','hidden');
+    tears.setAttribute('visibility','hidden');
+    arms.setAttribute('visibility','hidden');
+    mouth.setAttribute('visibility','visible');
+    stage.querySelectorAll('.gs-lid').forEach(l=>l.style.transform='scaleY(0)');
+    zzzEls.forEach(z=>z.remove()); zzzEls=[];
+    stopTears();
+  }
+  function setMood(m){
+    mood=m; clearMoodVisuals();
+    if(m==='sleepy'){
+      stage.classList.add('sleepy');
+      mouth.setAttribute('d',MOUTHS.sleepy);
+      stage.querySelectorAll('.gs-lid').forEach(l=>l.style.transform='scaleY(.55)');
+      for(let i=0;i<3;i++){
+        const z=document.createElement('span');
+        z.className='gs-zzz'; z.textContent='z'; z.style.fontSize=(14+i*6)+'px';
+        z.style.left=(62+i*6)+'%'; z.style.top=(18-i*4)+'%'; z.style.animationDelay=i*.8+'s';
+        stage.appendChild(z); zzzEls.push(z);
+      }
+    }else if(m==='happy'){ mouth.setAttribute('d',MOUTHS.happy); }
+    else{ mouth.setAttribute('d',MOUTHS.idle); }
+  }
+
+  /* ---------- laughter levels ---------- */
+  function laugh(lv){
+    // no explicit level: escalate with click streak
+    if(lv==null){lv=Math.min(5,level+1);}
+    if(mood==='laugh'&&level===5)return; // don't interrupt flight
+    level=lv; mood='laugh';
+    const L=LEVELS[lv];
+    clearMoodVisuals();
+    stage.classList.add(L.cls);
+
+    if(lv>=2){ // eyes squeeze shut, mouth wide open
+      eyesOpen.setAttribute('visibility','hidden');
+      eyesLaugh.setAttribute('visibility','visible');
+      mouth.setAttribute('visibility','hidden');
+      mouthOpen.setAttribute('visibility','visible');
+    }else{ mouth.setAttribute('d',MOUTHS.happy); }
+    if(lv>=3)tears.setAttribute('visibility','visible');
+    if(lv===4)arms.setAttribute('visibility','visible'); // clutching stomach
+    startTears(L.tearRate,lv===5);
+
+    for(let i=0;i<L.n;i++)setTimeout(()=>particle(L.words[Math.random()*L.words.length|0],L.big),i*90);
+    if(L.say)say(L.say,L.dur-500);
+    giggleSound(Math.min(2+lv*1.5|0,8));
+
+    // streak window: another click within 2.5s escalates
+    clearTimeout(streakTimer);
+    streakTimer=setTimeout(()=>level=0,2500);
+
+    clearTimeout(laughTimer);
+    laughTimer=setTimeout(()=>{setMood('happy');decayPuddle();},L.dur);
+    resetIdle();
+  }
+
+  /* ---------- grow ---------- */
+  let grown=false;
+  function grow(){
+    setMood('happy');
+    stage.classList.add('growing');
+    grown=!grown;
+    bud.classList.toggle('pop',grown);
+    for(let i=0;i<8;i++)setTimeout(()=>particle(['✨','🌱','＋1'][i%3],true),i*90);
+    say(grown?'New leaf unlocked! 🌱':'Trimmed and tidy ✂️',2200);
+    giggleSound(4);
+    setTimeout(()=>{stage.classList.remove('growing');setMood('idle');},1100);
+    resetIdle();
+  }
+
+  function celebrate(){
+    setMood('happy'); stage.classList.add('celebrating');
+    confetti(); giggleSound(5);
+    say(['You did it! 🌱','Look at you grow!','Streak saved!'][Math.random()*3|0]);
+    setTimeout(()=>{stage.classList.remove('celebrating');setMood('idle');},2000);
+    resetIdle();
+  }
+
+  let bubbleTimer=null;
+  function say(text,ms){
+    bubble.textContent=text; bubble.classList.add('show');
+    clearTimeout(bubbleTimer);
+    bubbleTimer=setTimeout(()=>bubble.classList.remove('show'),ms||2800);
+  }
+
+  /* ---------- idle / sleep ---------- */
+  function resetIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(()=>setMood('sleepy'),20000);}
+  function wake(){if(mood==='sleepy'){setMood('idle');say('Oh! You\'re back 😄',1600);}resetIdle();}
+
+  /* ---------- events ---------- */
+  stage.addEventListener('click',()=>laugh());
+  stage.addEventListener('mouseenter',()=>{if(mood==='idle')setMood('happy');wake();});
+  stage.addEventListener('mouseleave',()=>{if(mood==='happy')setMood('idle');});
+  document.addEventListener('keydown',wake);
+  resetIdle();
+
+  /* ---------- public API ---------- */
+  window.GiggleSprout={
+    laugh, grow, celebrate, say, setMood,
+    toggleSound(){
+      soundOn=!soundOn;
+      const b=document.getElementById('soundBtn');
+      if(b)b.textContent=soundOn?'🔊 Sound: on':'🔇 Sound: off';
+      if(soundOn)giggleSound(3);
+    }
+  };
+})();
+</script>
+</body>
+</html>
