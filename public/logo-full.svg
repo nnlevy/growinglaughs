@@ -1,0 +1,22 @@
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <radialGradient id="b" cx="50%" cy="38%" r="75%"><stop offset="0%" stop-color="#5ED267"/><stop offset="100%" stop-color="#3FBF4E"/></radialGradient>
+    <linearGradient id="l" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6FE07A"/><stop offset="100%" stop-color="#3FBF4E"/></linearGradient>
+  </defs>
+  <!-- Sprig -->
+  <g>
+    <path d="M120 100 Q118 84 120 72" stroke="#2E9E3C" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M120 78 Q84 74 74 46 Q108 42 120 72 Z" fill="url(#l)" stroke="#2E9E3C" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M120 78 Q156 74 166 46 Q132 42 120 72 Z" fill="url(#l)" stroke="#2E9E3C" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M120 96 C66 96 42 142 42 192 C42 244 76 270 120 270 C164 270 198 244 198 192 C198 142 174 96 120 96 Z" fill="url(#b)" stroke="#2E9E3C" stroke-width="4"/>
+    <path d="M79 168 Q92 154 105 168" stroke="#26332B" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M135 168 Q148 154 161 168" stroke="#26332B" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M88 198 Q120 248 152 198 Q120 210 88 198 Z" fill="#26332B"/>
+    <path d="M104 220 Q120 236 136 220 Q120 244 104 220 Z" fill="#FF7B8E"/>
+    <ellipse cx="96" cy="268" rx="16" ry="8" fill="#2E9E3C"/>
+    <ellipse cx="144" cy="268" rx="16" ry="8" fill="#2E9E3C"/>
+  </g>
+  <!-- wordmark -->
+  <text x="240" y="172" font-size="64" font-weight="800" fill="#26332B">growing<tspan fill="#3FBF4E">laughs</tspan></text>
+  <text x="243" y="212" font-size="24" font-weight="600" fill="#26332B" opacity="0.6">grow your funny, five minutes a day</text>
+</svg>

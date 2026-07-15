@@ -1,0 +1,12 @@
+<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" fill="#26332B">
+  <!-- single-color Sprig — use currentColor by replacing fill on root -->
+  <path d="M120 100 Q118 84 120 72" stroke="#26332B" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M120 78 Q84 74 74 46 Q108 42 120 72 Z"/>
+  <path d="M120 78 Q156 74 166 46 Q132 42 120 72 Z"/>
+  <path d="M120 96 C66 96 42 142 42 192 C42 244 76 270 120 270 C164 270 198 244 198 192 C198 142 174 96 120 96 Z" fill="none" stroke="#26332B" stroke-width="8"/>
+  <path d="M79 168 Q92 154 105 168" stroke="#26332B" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M135 168 Q148 154 161 168" stroke="#26332B" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M88 198 Q120 248 152 198 Q120 210 88 198 Z"/>
+  <ellipse cx="96" cy="268" rx="16" ry="8"/>
+  <ellipse cx="144" cy="268" rx="16" ry="8"/>
+</svg>
