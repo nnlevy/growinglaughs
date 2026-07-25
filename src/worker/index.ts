@@ -167,10 +167,10 @@ function shell(title: string, body: string, extraScript = ""): string {
   <a class="brand" href="/"><img src="/logo-full.svg" alt="Sprig"/>LaughPath</a>
   <a href="/break">Break</a><a href="/gym">Gym</a><a href="/roleplay">Roleplay</a><a href="/streak">Streak</a><a href="/guides">Guides</a>
   <span style="flex:1"></span>
-  <a href="/about">About</a><a href="/privacy">Privacy</a>
+  <a href="/about">About</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a>
 </div></nav>
 <main>${body}</main>
-<footer>© 2026 LaughPath on growinglaughs.com · Adults 18–34 · Not therapy · Brand-safe humor · <a href="/privacy">Privacy</a></footer>
+<footer>© 2026 LaughPath on growinglaughs.com · Adults 18–34 · Not therapy · Brand-safe humor · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></footer>
 <script>${GS_JS}</script>
 ${extraScript ? `<script>${extraScript}</script>` : ""}
 </body></html>`;
@@ -350,7 +350,27 @@ const PAGES: Record<string, () => string> = {
       `<h2>Privacy</h2>
       <p>Streak and practice notes default to your browser (localStorage). Age gate: 16+. We do not sell personal data. If ads appear on content pages later, we disclose third-party ad cookies (Google AdSense) and advertising partners in this policy.</p>
       <p>Roleplay inputs may be processed to generate safe rewrites; do not submit secrets or health diagnoses.</p>
-      <p>Contact: privacy@growinglaughs.com (or portfolio contact path).</p>`,
+      <p>Contact: privacy@growinglaughs.com (or portfolio contact path).</p>
+      <p><a href="/terms">Terms of Use</a></p>`,
+    ),
+  // Pulse 2026-07-25: /terms was hard 404 while privacy dual-covered.
+  "/terms": () =>
+    shell(
+      "Terms of Use",
+      `<h2>Terms of Use</h2>
+      <p class="lead">Last updated: July 25, 2026.</p>
+      <p>By using growinglaughs.com (LaughPath) you agree to these terms and the <a href="/privacy">Privacy Policy</a>. LaughPath is a brand-safe humor skill product for adults. It is <strong>not therapy, medical advice, or professional counseling</strong>.</p>
+      <h3>Acceptable use</h3>
+      <ul>
+        <li>Age gate: 16+ only; audience v1 is adults 18–34</li>
+        <li>No hate speech, harassment, self-harm content, sexual content involving minors, or attempts to bypass safety filters</li>
+        <li>Do not abuse APIs, scrape private data, or overload the service</li>
+      </ul>
+      <h3>Accounts, credits, and billing</h3>
+      <p>Optional paid features may route through portfolio billing (e.g. Stripe / RiskFreeTrial). Merchant refund policies apply when that checkout is used.</p>
+      <h3>Disclaimer &amp; liability</h3>
+      <p>THE SERVICE IS PROVIDED “AS IS” WITHOUT WARRANTIES OF ANY KIND. Humor outputs can miss tone or context. To the maximum extent permitted by law, LaughPath and its operator are not liable for indirect or consequential damages from use of the product.</p>
+      <p><a href="/privacy">Privacy</a> · <a href="/">Home</a></p>`,
     ),
 };
 
@@ -429,6 +449,23 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     let p = url.pathname.replace(/\/+$/, "") || "/";
+
+    // Legal/demand aliases → dual-cover surfaces (pulse 2026-07-25)
+    const legalAliases: Record<string, string> = {
+      "/eula": "/terms",
+      "/tos": "/terms",
+      "/conditions": "/terms",
+      "/terms-of-service": "/terms",
+      "/terms-of-use": "/terms",
+      "/policy": "/privacy",
+      "/gdpr": "/privacy",
+      "/ccpa": "/privacy",
+      "/cookies": "/privacy",
+      "/legal": "/privacy",
+    };
+    if (legalAliases[p]) {
+      return Response.redirect(new URL(legalAliases[p], url.origin).toString(), 301);
+    }
 
     // API
     if (p === "/api/health") {
