@@ -1,0 +1,91 @@
+:root{
+  --gl-green:#3FBF4E; --gl-green-dark:#2E9E3C; --gl-leaf:#57D463;
+  --gl-sun:#FFC93C; --gl-ink:#26332B; --gl-cream:#FFF9EC; --gl-tear:#7FD4FF;
+  --gl-belly:#B9EFAB; --gl-blush:#FF9FB1;
+}
+
+/* ============ EMBEDDABLE MASCOT (copy from here down + the JS) ============ */
+.gs-stage{position:relative;width:min(320px,80vw);user-select:none;-webkit-tap-highlight-color:transparent;margin:1rem auto}
+.gs-stage svg{width:100%;height:auto;display:block;cursor:pointer;overflow:visible}
+
+/* idle bob + sway */
+.gs-body-wrap{transform-origin:120px 240px;animation:gs-bob 3.4s ease-in-out infinite}
+@keyframes gs-bob{0%,100%{transform:translateY(0) rotate(0deg)}30%{transform:translateY(-5px) rotate(-1.2deg)}70%{transform:translateY(-2px) rotate(1.2deg)}}
+
+/* leaves gently breathe */
+.gs-leaf-l,.gs-leaf-r{transform-origin:120px 78px;transition:transform .3s ease}
+.gs-leaf-l{animation:gs-leafL 4s ease-in-out infinite}
+.gs-leaf-r{animation:gs-leafR 4s ease-in-out infinite}
+@keyframes gs-leafL{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-6deg)}}
+@keyframes gs-leafR{0%,100%{transform:rotate(0deg)}50%{transform:rotate(6deg)}}
+.gs-stage:hover .gs-leaf-l{transform:rotate(-14deg)}
+.gs-stage:hover .gs-leaf-r{transform:rotate(14deg)}
+
+/* ---- LAUGH LEVELS ---- */
+.gs-stage.lv1 .gs-body-wrap{animation:gs-chuckle .4s ease-in-out 2}
+@keyframes gs-chuckle{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.02,.96)}}
+.gs-stage.lv2 .gs-body-wrap{animation:gs-laugh .55s ease-in-out infinite}
+@keyframes gs-laugh{
+  0%,100%{transform:translateY(0) scale(1,1)}
+  25%{transform:translateY(6px) scale(1.06,.92)}
+  50%{transform:translateY(-10px) scale(.95,1.07)}
+  75%{transform:translateY(3px) scale(1.04,.94)}
+}
+.gs-stage.lv3 .gs-body-wrap{animation:gs-laugh .34s ease-in-out infinite}
+.gs-stage.lv4 .gs-body-wrap{animation:gs-rofl .48s ease-in-out infinite}
+@keyframes gs-rofl{
+  0%,100%{transform:rotate(-9deg) translateY(4px) scale(1.07,.90)}
+  50%{transform:rotate(9deg) translateY(-14px) scale(.92,1.10)}
+}
+.gs-stage.lv5 .gs-body-wrap{animation:gs-fly 3.2s ease-in-out forwards}
+@keyframes gs-fly{
+  0%{transform:translateY(0) rotate(0)}
+  18%{transform:translateY(-100px) rotate(-5deg)}
+  38%{transform:translateY(-88px) rotate(5deg)}
+  58%{transform:translateY(-102px) rotate(-4deg)}
+  78%{transform:translateY(-90px) rotate(3deg)}
+  100%{transform:translateY(0) rotate(0)}
+}
+.gs-stage.lv5 .gs-leaf-l,.gs-stage.lv5 .gs-leaf-r{animation:gs-rotor .1s linear infinite}
+@keyframes gs-rotor{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}100%{transform:scaleX(1)}}
+.gs-rotor-blur{visibility:hidden}
+.gs-stage.lv5 .gs-rotor-blur{visibility:visible;animation:gs-blurpulse .2s linear infinite}
+@keyframes gs-blurpulse{0%,100%{opacity:.18}50%{opacity:.32}}
+
+/* leaf shake during L2–L4 */
+.gs-stage.lv2 .gs-leaf-l,.gs-stage.lv3 .gs-leaf-l,.gs-stage.lv4 .gs-leaf-l{animation:gs-shakeL .3s linear infinite}
+.gs-stage.lv2 .gs-leaf-r,.gs-stage.lv3 .gs-leaf-r,.gs-stage.lv4 .gs-leaf-r{animation:gs-shakeR .3s linear infinite}
+@keyframes gs-shakeL{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(2deg)}}
+@keyframes gs-shakeR{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-2deg)}}
+
+/* grow: spring up + new bud */
+.gs-stage.growing .gs-body-wrap{animation:gs-growup 1s cubic-bezier(.3,1.8,.4,1) 1}
+@keyframes gs-growup{0%{transform:scale(1)}55%{transform:scale(1.15,1.2)}80%{transform:scale(.98,1.02)}100%{transform:scale(1)}}
+.gs-bud{transform-origin:120px 66px;transform:scale(0);transition:transform .5s cubic-bezier(.3,2.2,.4,1)}
+.gs-bud.pop{transform:scale(1)}
+
+/* celebrate jump */
+.gs-stage.celebrating .gs-body-wrap{animation:gs-jump .6s cubic-bezier(.3,1.6,.5,1) 3}
+@keyframes gs-jump{0%,100%{transform:translateY(0) scale(1)}35%{transform:translateY(-34px) scale(1.05)}55%{transform:translateY(-30px) rotate(6deg)}}
+
+/* sleepy droop */
+.gs-stage.sleepy .gs-body-wrap{animation:gs-snooze 5s ease-in-out infinite}
+@keyframes gs-snooze{0%,100%{transform:translateY(2px) rotate(-2.5deg)}50%{transform:translateY(5px) rotate(-4deg)}}
+.gs-stage.sleepy .gs-leaf-l{transform:rotate(10deg)}
+.gs-stage.sleepy .gs-leaf-r{transform:rotate(-10deg)}
+
+/* floating word particles */
+.gs-particle{position:absolute;font-weight:800;pointer-events:none;animation:gs-float 1.3s ease-out forwards;text-shadow:0 1px 0 #fff}
+@keyframes gs-float{0%{opacity:0;transform:translate(0,0) scale(.5) rotate(0deg)}15%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-110px) scale(1.15) rotate(var(--rot))}}
+
+/* falling tear drops */
+.gs-drop{position:absolute;width:8px;height:11px;background:var(--gl-tear);border-radius:50% 50% 55% 55%;pointer-events:none;animation:gs-fall var(--t,.65s) ease-in forwards;opacity:.9}
+@keyframes gs-fall{0%{transform:translateY(0) scale(.7)}100%{transform:translateY(var(--fall,120px)) scale(1)}}
+
+.gs-zzz{position:absolute;font-weight:700;color:var(--gl-green-dark);opacity:0;pointer-events:none;animation:gs-zfloat 2.6s ease-out infinite}
+@keyframes gs-zfloat{0%{opacity:0;transform:translate(0,0) scale(.6)}25%{opacity:.8}100%{opacity:0;transform:translate(26px,-70px) scale(1.2)}}
+
+/* speech bubble */
+.gs-bubble{position:absolute;left:50%;top:-14px;transform:translate(-50%,-100%) scale(.7);opacity:0;background:#fff;border:3px solid var(--gl-ink);border-radius:16px;padding:10px 16px;font-weight:700;font-size:15px;white-space:nowrap;transition:all .25s cubic-bezier(.3,1.5,.5,1);pointer-events:none;box-shadow:0 4px 0 rgba(38,51,43,.15);z-index:2}
+.gs-bubble::after{content:'';position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--gl-ink)}
+.gs-bubble.show{opacity:1;transform:translate(-50%,-100%) scale(1)}
