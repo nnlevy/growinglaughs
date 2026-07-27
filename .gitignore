@@ -1,0 +1,6 @@
+
+# portfolio implement harness — never commit (see portfolio-remote-runner 4381cd0)
+implement-stdout.txt
+implement-result.json
+scripts/model_intel/
+scripts/model_select.py
