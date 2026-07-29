@@ -467,6 +467,21 @@ export default {
       return Response.redirect(new URL(legalAliases[p], url.origin).toString(), 301);
     }
 
+    // Pulse 2026-07-29: CTA dual-cover — live /go·/launch HARD404 while product home 200
+    // "LaughPath · LaughPath". True 301 → / (pathname already slash-stripped).
+    const ctaAliases: Record<string, string> = {
+      "/go": "/",
+      "/launch": "/",
+      "/start": "/",
+      "/app": "/",
+      "/try": "/",
+      "/get-started": "/",
+      "/getstarted": "/",
+    };
+    if (ctaAliases[p] && (request.method === "GET" || request.method === "HEAD")) {
+      return Response.redirect(new URL(ctaAliases[p], url.origin).toString(), 301);
+    }
+
     // API
     if (p === "/api/health") {
       return Response.json({ ok: true, product: "LaughPath", domain: "growinglaughs.com" });
