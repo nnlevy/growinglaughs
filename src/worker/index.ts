@@ -29,6 +29,15 @@ h2{font-size:1.6rem;margin:0 0 .75rem}
 .grid3{display:grid;gap:1rem;grid-template-columns:repeat(3,1fr)}
 .grid2{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr)}
 @media(max-width:800px){.grid3,.grid2{grid-template-columns:1fr}}
+@media(max-width:520px){
+main{padding:.85rem 1rem 2rem}
+h1{font-size:1.35rem;margin:0 0 .45rem}
+.home-lead,.home-notice,.home-sprig{display:none}
+#break-steps li:nth-child(n+2){display:none}
+.pill{margin-bottom:.4rem}
+#laugh-break{margin-top:.55rem}
+#break-timer{font-size:1.35rem!important;margin-top:.5rem!important}
+}
 footer{max-width:56rem;margin:0 auto;padding:1.5rem 1rem;font-size:.78rem;opacity:.65;border-top:1px solid #e5e7eb}
 .chat{background:#fff;border:1px solid #e5e7eb;border-radius:1rem;padding:1rem;min-height:12rem;white-space:pre-wrap;font-size:.95rem}
 .msg-user{color:var(--gl-green-dark);font-weight:700}
@@ -183,20 +192,34 @@ const PAGES: Record<string, () => string> = {
       `<div class="pill">DUOLINGO × HEADSPACE FOR HUMOR</div>
       <div class="grid2">
         <div>
-          <h1>Feel lighter in minutes.<br/>Become funnier over weeks.</h1>
-          <p class="lead">Short Laugh Breaks, Humor Gym drills, and safe AI roleplay for adults 18–34. No kids mode. No therapy claims. Just a lighter mind and a warmer presence.</p>
-          <p style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem">
-            <a class="btn" href="/break">Start a Laugh Break →</a>
-            <a class="btn btn-ghost" href="/roleplay">Try roleplay</a>
-          </p>
-          <p class="notice" style="margin-top:1.25rem">Launch surface: streak + practice loop live. Premium Coach / Teams later.</p>
+          <h1>Feel lighter in minutes.</h1>
+          <p class="lead home-lead">Short Laugh Breaks, Humor Gym drills, and safe AI roleplay for adults 18–34. No kids mode. No therapy claims. Just a lighter mind and a warmer presence.</p>
+          <div class="card" id="laugh-break" style="margin-top:1rem">
+            <ol id="break-steps">
+              <li>Unclench your jaw. Drop your shoulders.</li>
+              <li>Name one tiny absurd thing near you (sticky note tyranny, heroic houseplant, etc.).</li>
+              <li>Exhale longer than you inhale, twice.</li>
+              <li>Optional: say the absurd thing out loud in a movie-trailer voice.</li>
+            </ol>
+            <p style="margin-top:1rem"><button class="btn" id="break-go" type="button">Begin 60s reset</button>
+            <button class="btn btn-ghost" id="break-done" type="button" style="margin-left:.5rem">I feel lighter → celebrate</button></p>
+            <div id="break-timer" style="font-size:2rem;font-weight:800;margin-top:1rem"></div>
+            <label style="margin-top:1rem">Mood lift (1–5)
+              <input type="range" min="1" max="5" value="3" id="lift" oninput="window.GiggleSprout&&window.GiggleSprout.laugh(+this.value)"/>
+            </label>
+          </div>
         </div>
-        <div class="card" style="text-align:center">
+        <div class="card home-sprig" style="text-align:center">
           <div style="font-weight:800;margin-bottom:.5rem">Meet Sprig</div>
           ${SPRIG_SVG}
           <p style="font-size:.9rem;opacity:.75">Click to climb the laugh ladder. Celebrate after a lesson.</p>
         </div>
       </div>`,
+      `document.getElementById('break-go')?.addEventListener('click',()=>{
+        let t=60; const el=document.getElementById('break-timer');
+        const id=setInterval(()=>{ el.textContent=t+'s'; if(--t<0){clearInterval(id); el.textContent='Done'; window.GiggleSprout?.celebrate(); } },1000);
+      });
+      document.getElementById('break-done')?.addEventListener('click',()=>window.GiggleSprout?.celebrate());`,
     ),
   "/break": () =>
     shell(
