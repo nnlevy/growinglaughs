@@ -4,3 +4,8 @@ implement-stdout.txt
 implement-result.json
 scripts/model_intel/
 scripts/model_select.py
+
+node_modules/
+.wrangler/
+dist/
+package-lock.json

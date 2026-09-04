@@ -25,6 +25,12 @@ h2{font-size:1.6rem;margin:0 0 .75rem}
 .btn{display:inline-block;background:var(--gl-green);color:#fff;font-weight:700;padding:.85rem 1.4rem;border-radius:1rem;text-decoration:none;border:none;cursor:pointer;font-size:1rem}
 .btn:hover{background:var(--gl-green-dark)}
 .btn-ghost{background:transparent;color:var(--gl-ink);border:1px solid #d1d5db}
+.break-ctas{display:flex;flex-wrap:wrap;gap:.65rem;align-items:stretch;margin-top:1rem}
+.break-ctas .btn{margin:0;text-align:center}
+@media(max-width:420px){
+.break-ctas{flex-direction:column;flex-wrap:nowrap}
+.break-ctas .btn{width:100%;min-height:48px}
+}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:1.1rem;padding:1.25rem}
 .grid3{display:grid;gap:1rem;grid-template-columns:repeat(3,1fr)}
 .grid2{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr)}
@@ -37,6 +43,8 @@ h1{font-size:1.35rem;margin:0 0 .45rem}
 .pill{margin-bottom:.4rem}
 #laugh-break{margin-top:.55rem}
 #break-timer{font-size:1.35rem!important;margin-top:.5rem!important}
+.break-ctas{flex-direction:column;gap:.55rem;margin-top:.75rem}
+.break-ctas .btn{width:100%;min-height:48px;padding:.9rem 1rem;font-size:.95rem}
 }
 footer{max-width:56rem;margin:0 auto;padding:1.5rem 1rem;font-size:.78rem;opacity:.65;border-top:1px solid #e5e7eb}
 .chat{background:#fff;border:1px solid #e5e7eb;border-radius:1rem;padding:1rem;min-height:12rem;white-space:pre-wrap;font-size:.95rem}
@@ -201,8 +209,10 @@ const PAGES: Record<string, () => string> = {
               <li>Exhale longer than you inhale, twice.</li>
               <li>Optional: say the absurd thing out loud in a movie-trailer voice.</li>
             </ol>
-            <p style="margin-top:1rem"><button class="btn" id="break-go" type="button">Begin 60s reset</button>
-            <button class="btn btn-ghost" id="break-done" type="button" style="margin-left:.5rem">I feel lighter → celebrate</button></p>
+            <div class="break-ctas" role="group" aria-label="Laugh break actions">
+            <button class="btn" id="break-go" type="button">Begin 60s reset</button>
+            <button class="btn btn-ghost" id="break-done" type="button">I feel lighter → celebrate</button>
+            </div>
             <div id="break-timer" style="font-size:2rem;font-weight:800;margin-top:1rem"></div>
             <label style="margin-top:1rem">Mood lift (1–5)
               <input type="range" min="1" max="5" value="3" id="lift" oninput="window.GiggleSprout&&window.GiggleSprout.laugh(+this.value)"/>
@@ -233,8 +243,10 @@ const PAGES: Record<string, () => string> = {
           <li>Exhale longer than you inhale, twice.</li>
           <li>Optional: say the absurd thing out loud in a movie-trailer voice.</li>
         </ol>
-        <p style="margin-top:1rem"><button class="btn" id="break-go" type="button">Begin 60s reset</button>
-        <button class="btn btn-ghost" id="break-done" type="button" style="margin-left:.5rem">I feel lighter → celebrate</button></p>
+        <div class="break-ctas" role="group" aria-label="Laugh break actions">
+        <button class="btn" id="break-go" type="button">Begin 60s reset</button>
+        <button class="btn btn-ghost" id="break-done" type="button">I feel lighter → celebrate</button>
+        </div>
         <div id="break-timer" style="font-size:2rem;font-weight:800;margin-top:1rem"></div>
         <label style="margin-top:1rem">Mood lift (1–5)
           <input type="range" min="1" max="5" value="3" id="lift" oninput="window.GiggleSprout&&window.GiggleSprout.laugh(+this.value)"/>
