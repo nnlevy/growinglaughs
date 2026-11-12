@@ -14,7 +14,7 @@ const get = async (path) => {
 test("home title is no longer 'LaughPath · LaughPath' and carries canonical + share card", async () => {
   const { res, html } = await get("/");
   assert.equal(res.status, 200);
-  assert.match(html, /<title>Laugh Break: feel lighter in 60 seconds \| LaughPath<\/title>/);
+  assert.match(html, /<title>Laugh Break: a 60-second reset \| LaughPath<\/title>/);
   assert.doesNotMatch(html, /<title>LaughPath · LaughPath<\/title>/);
   assert.match(html, /<link rel="canonical" href="https:\/\/growinglaughs\.com\/"\/>/);
   assert.match(html, /og:image" content="https:\/\/growinglaughs\.com\/og-card\.png"/);

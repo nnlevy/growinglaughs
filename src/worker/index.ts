@@ -192,7 +192,7 @@ function shell(title: string, body: string, extraScript = "", meta: PageMeta = {
 <meta property="og:type" content="website"/><meta property="og:site_name" content="LaughPath"/>
 <meta property="og:title" content="${attr(fullTitle)}"/><meta property="og:description" content="${attr(description)}"/>
 <meta property="og:image" content="${SITE}/og-card.png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
-<meta property="og:image:alt" content="Sprig the Giggle Sprout beside the words: Feel lighter in 60 seconds."/>
+<meta property="og:image:alt" content="Sprig the Giggle Sprout beside the words: A 60-second laugh break."/>
 <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content="${SITE}/og-card.png"/>
 <link rel="icon" href="/favicon.svg"/>${ld}
 <style>${BRAND}</style>
@@ -309,7 +309,7 @@ const PAGES: Record<string, () => string> = {
       });
       document.getElementById('break-done')?.addEventListener('click',()=>window.GiggleSprout?.celebrate());`,
       {
-        fullTitle: "Laugh Break: feel lighter in 60 seconds | LaughPath",
+        fullTitle: "Laugh Break: a 60-second reset | LaughPath",
         description: "A free 60-second Laugh Break, office-safe joke rewrites and short humor drills for adults. No sign-up. Not therapy.",
         jsonLd: {
           "@context": "https://schema.org",
