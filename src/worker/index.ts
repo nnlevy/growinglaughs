@@ -171,13 +171,30 @@ const SCENARIOS: Record<string, { title: string; system: string; openers: string
   },
 };
 
-function shell(title: string, body: string, extraScript = ""): string {
+const SITE = "https://growinglaughs.com";
+const DEFAULT_DESCRIPTION = "LaughPath — feel lighter in minutes, funnier over weeks. Safe humor skill practice for adults 18–34.";
+
+type PageMeta = { fullTitle?: string; description?: string; jsonLd?: unknown };
+
+function attr(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+
+function shell(title: string, body: string, extraScript = "", meta: PageMeta = {}): string {
+  const fullTitle = meta.fullTitle || `${title} · LaughPath`;
+  const description = meta.description || DEFAULT_DESCRIPTION;
+  const ld = meta.jsonLd ? `\n<script type="application/ld+json">${JSON.stringify(meta.jsonLd).replace(/</g, "\\u003c")}</script>` : "";
   return `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>${title} · LaughPath</title>
-<meta name="description" content="LaughPath — feel lighter in minutes, funnier over weeks. Safe humor skill practice for adults 18–34."/>
-<link rel="icon" href="/favicon.svg"/>
+<title>${fullTitle}</title>
+<meta name="description" content="${attr(description)}"/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content="LaughPath"/>
+<meta property="og:title" content="${attr(fullTitle)}"/><meta property="og:description" content="${attr(description)}"/>
+<meta property="og:image" content="${SITE}/og-card.png"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Sprig the Giggle Sprout beside the words: Feel lighter in 60 seconds."/>
+<meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content="${SITE}/og-card.png"/>
+<link rel="icon" href="/favicon.svg"/>${ld}
 <style>${BRAND}</style>
 </head><body>
 <nav><div class="nav-inner">
@@ -192,6 +209,67 @@ function shell(title: string, body: string, extraScript = ""): string {
 ${extraScript ? `<script>${extraScript}</script>` : ""}
 </body></html>`;
 }
+
+// Clean jokes for grown-ups to tell kids. Folk classics, no facts or numbers to source.
+// Exported for tests: the page lists every joke as text, and the picker reads the same array.
+export const KIDS_JOKES: ReadonlyArray<readonly [string, string]> = [
+  ["Why did the cookie go to the doctor?", "It felt crummy."],
+  ["What do you call a sleeping dinosaur?", "A dino-snore."],
+  ["Why can’t a bicycle stand up by itself?", "It’s two tired."],
+  ["What do you call cheese that isn’t yours?", "Nacho cheese."],
+  ["Why did the teddy bear say no to dessert?", "It was already stuffed."],
+  ["What has ears but can’t hear?", "A cornfield."],
+  ["Knock knock. Who’s there? Lettuce. Lettuce who?", "Lettuce in, it’s cold out here."],
+  ["Why are fish so smart?", "They live in schools."],
+  ["What do you call a bear with no teeth?", "A gummy bear."],
+  ["Why did the banana go to the doctor?", "It wasn’t peeling well."],
+  ["What do you call a fake noodle?", "An impasta."],
+  ["Knock knock. Who’s there? Boo. Boo who?", "Don’t cry, it’s only a joke."],
+];
+
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+const KIDS_JOKES_HTML = `<p>For the grown-up doing the telling: clean, kind jokes for dinner, the car or bedtime. Tap for one, ask it, pause, then reveal.</p>
+<div id="kj" class="notice" aria-live="polite" style="margin:1rem 0">
+  <p id="kj-q" style="font-weight:800;font-size:1.15rem;margin:0 0 .5rem">${esc(KIDS_JOKES[0][0])}</p>
+  <p id="kj-a" style="margin:0" hidden>${esc(KIDS_JOKES[0][1])}</p>
+</div>
+<div class="break-ctas" role="group" aria-label="Joke actions">
+  <button class="btn" id="kj-reveal" type="button">Tell me</button>
+  <button class="btn btn-ghost" id="kj-next" type="button">Another joke</button>
+  <button class="btn btn-ghost" id="kj-share" type="button">Share this joke</button>
+</div>
+<p id="kj-msg" style="font-size:.9rem;min-height:1.4em;margin:.5rem 0 0"></p>
+<h3>How to tell a joke to a kid so it lands</h3>
+<ol>
+  <li>Ask the question and stop. Let them guess; a wrong guess is half the fun.</li>
+  <li>Say the punchline plainly, then smile. No need to explain it.</li>
+  <li>If the wordplay doesn’t land yet, tell the same joke again in a silly voice.</li>
+  <li>Laugh at their made-up joke too, even when it makes no sense. That’s how they learn to try.</li>
+  <li>Keep it kind: jokes about things, food and animals, never about a person.</li>
+</ol>
+<h3>All the jokes</h3>
+<ol>
+${KIDS_JOKES.map(([q, a]) => `  <li>${esc(q)} <em>${esc(a)}</em></li>`).join("\n")}
+</ol>
+<p>Telling jokes to a two- to five-year-old? <a href="https://kide.us/?utm_source=growinglaughs.com&amp;utm_medium=referral&amp;utm_campaign=kids-jokes">Pip the Sprout on kide.us</a> reads colors, counting and shapes out loud, and ends screen time by getting sleepy.</p>
+<p><a class="btn" href="/break">Now take your own 60s Laugh Break</a></p>`;
+
+const KIDS_JOKES_SCRIPT = `(function(){
+  var J=${JSON.stringify(KIDS_JOKES).replace(/</g, "\\u003c")}, i=0;
+  var q=document.getElementById('kj-q'), a=document.getElementById('kj-a'), msg=document.getElementById('kj-msg');
+  function show(n){ i=n; q.textContent=J[i][0]; a.textContent=J[i][1]; a.hidden=true; msg.textContent=''; }
+  document.getElementById('kj-reveal').addEventListener('click',function(){ a.hidden=false; if(window.GiggleSprout) window.GiggleSprout.laugh(2); });
+  document.getElementById('kj-next').addEventListener('click',function(){ show((i+1+Math.floor(Math.random()*(J.length-1)))%J.length); });
+  document.getElementById('kj-share').addEventListener('click',function(){
+    var text=J[i][0]+' '+J[i][1], url=location.origin+'/guides/clean-jokes-to-tell-kids';
+    if(navigator.share){ navigator.share({title:'A clean joke for kids',text:text,url:url}).catch(function(){}); return; }
+    if(navigator.clipboard){ navigator.clipboard.writeText(text+' '+url).then(function(){ msg.textContent='Copied. Paste it to whoever needs a laugh.'; },function(){ msg.textContent=text; }); }
+    else { msg.textContent=text; }
+  });
+})();`;
 
 const PAGES: Record<string, () => string> = {
   "/": () =>
@@ -230,6 +308,25 @@ const PAGES: Record<string, () => string> = {
         const id=setInterval(()=>{ el.textContent=t+'s'; if(--t<0){clearInterval(id); el.textContent='Done'; window.GiggleSprout?.celebrate(); } },1000);
       });
       document.getElementById('break-done')?.addEventListener('click',()=>window.GiggleSprout?.celebrate());`,
+      {
+        fullTitle: "Laugh Break: feel lighter in 60 seconds | LaughPath",
+        description: "A free 60-second Laugh Break, office-safe joke rewrites and short humor drills for adults. No sign-up. Not therapy.",
+        jsonLd: {
+          "@context": "https://schema.org",
+          "@graph": [
+            { "@type": "WebSite", name: "LaughPath", url: `${SITE}/` },
+            {
+              "@type": "WebApplication",
+              name: "LaughPath Laugh Break",
+              url: `${SITE}/`,
+              applicationCategory: "LifestyleApplication",
+              operatingSystem: "Any (web browser)",
+              isAccessibleForFree: true,
+              description: "A guided 60-second Laugh Break, office-safe joke rewrites and short humor drills for adults.",
+            },
+          ],
+        },
+      },
     ),
   "/break": () =>
     shell(
@@ -344,6 +441,7 @@ const PAGES: Record<string, () => string> = {
         <a class="card" href="/guides/stress-laugh-break" style="text-decoration:none;color:inherit"><h3>Funny stress relief that isn’t avoidance</h3><p>60-second resets that keep honesty.</p></a>
         <a class="card" href="/guides/work-icebreakers" style="text-decoration:none;color:inherit"><h3>Icebreakers for work</h3><p>HR-safe openers that don’t cringe.</p></a>
         <a class="card" href="/guides/office-safe-rewrites" style="text-decoration:none;color:inherit"><h3>Office-safe joke rewrites</h3><p>Take the edge off without killing the laugh.</p></a>
+        <a class="card" href="/guides/clean-jokes-to-tell-kids" style="text-decoration:none;color:inherit"><h3>Clean jokes to tell kids</h3><p>For the grown-up doing the telling: jokes that land, and how to tell them.</p></a>
       </div>`,
     ),
   "/guides/how-to-be-witty": () =>
@@ -370,6 +468,16 @@ const PAGES: Record<string, () => string> = {
       "Office-safe joke rewrites",
       `<p>Take a sharp impulse and rewrite: remove targets, keep the absurdity. Example: “My laptop is older than some interns” → “This laptop has tenure.”</p>
       <p><a class="btn" href="/roleplay">Rewrite with coach</a></p>`,
+    ),
+  "/guides/clean-jokes-to-tell-kids": () =>
+    guide(
+      "Clean jokes to tell kids",
+      KIDS_JOKES_HTML,
+      KIDS_JOKES_SCRIPT,
+      {
+        fullTitle: "Clean jokes for kids (for the grown-up telling them) | LaughPath",
+        description: "Clean, kind jokes for kids that grown-ups can tell at dinner, in the car or at bedtime, plus how to tell them so they land. Tap for another joke.",
+      },
     ),
   "/about": () =>
     shell(
@@ -409,8 +517,8 @@ const PAGES: Record<string, () => string> = {
     ),
 };
 
-function guide(title: string, html: string) {
-  return shell(title, `<h2>${title}</h2><div class="card">${html}</div><p style="margin-top:1rem"><a href="/guides">← All guides</a></p>`);
+function guide(title: string, html: string, extraScript = "", meta: PageMeta = {}) {
+  return shell(title, `<h1 style="font-size:clamp(1.6rem,4vw,2.4rem)">${title}</h1><div class="card">${html}</div><p style="margin-top:1rem"><a href="/guides">← All guides</a></p>`, extraScript, meta);
 }
 
 const ROLEPLAY_SYSTEM = `You are Sprig, the Giggle Sprout — a brand-safe humor coach for LaughPath on growinglaughs.com.
@@ -545,7 +653,12 @@ export default {
     if (request.method === "GET" || request.method === "HEAD") {
       const page = PAGES[p];
       if (page) {
-        return new Response(page(), {
+        const canonical = `${SITE}${p === "/" ? "/" : p}`;
+        const html = page().replace(
+          "</head>",
+          `<link rel="canonical" href="${canonical}"/><meta property="og:url" content="${canonical}"/>\n</head>`,
+        );
+        return new Response(html, {
           headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=60" },
         });
       }

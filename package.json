@@ -7,7 +7,8 @@
 		"check": "npm run build && npx wrangler deploy --dry-run",
 		"deploy": "npm run build && npx wrangler deploy",
 		"dev": "npx wrangler dev",
-		"predeploy": "bash scripts/deploy-guard.sh"
+		"predeploy": "bash scripts/deploy-guard.sh",
+		"test": "esbuild src/worker/index.ts --bundle --format=esm --platform=neutral --outfile=.test-out/worker.mjs --log-level=warning && node --test scripts/pages.test.mjs"
 	},
 	"devDependencies": {
 		"wrangler": "^3.78.0"
